@@ -1,9 +1,3 @@
-"""
-recommended:
-sudo aptitude install fonts-noto-color-emoji
-urxvt -fg white -bg black -fn "xft:Noto Color Emoji 20"
-"""
-
 import time
 import random
 import math
