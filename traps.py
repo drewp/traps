@@ -22,6 +22,7 @@ traps = [
     # x, y, placetime
 ]
 
+
 def chase():
     global ex, ey, lastEnemyStep
     now = time.time()
@@ -39,20 +40,24 @@ def chase():
     ex = ex + dx
     ey = ey + dy
 
+
 def trapEnemy():
     global playerWins
     playerWins = playerWins + 1
     resetBoard("Dog fell in a trap")
 
+
 def enemyHits():
     global eWins
     eWins = eWins + 1
     resetBoard("Dog catches you")
-    
+
+
 def trapPlayer():
     global eWins
     eWins = eWins + 1
     resetBoard("You fell in a trap")
+
 
 def resetBoard(message):
     global boardSetup, x, y, ex, ey
@@ -64,29 +69,32 @@ def resetBoard(message):
     ey = random.randrange(height // 2 - 5) + height // 2 + 5
     traps[:] = []
 
+
 def stepAway():
     global x, y
     allowed = []
     for dx in [-1, 0, 1]:
         for dy in [-1, 0, 1]:
             nx, ny = x + dx, y + dy
-            if 0 <= nx < width and 0 <= ny < height and (nx, ny) != (x, y) and (nx, ny) != (ex, ey):
+            if 0 <= nx < width and 0 <= ny < height and (nx, ny) != (
+                    x, y) and (nx, ny) != (ex, ey):
                 allowed.append((nx, ny))
 
     random.shuffle(allowed)
     for nx, ny in allowed:
         if getTrap(nx, ny) is None:
-            x,  y = nx, ny
+            x, y = nx, ny
             return
-    
+
     # they all have traps- you're stuck, so just sit on the trap you placed and lose
+
 
 def getTrap(qx, qy):
     for tx, ty, placed in traps:
         if (tx, ty) == (qx, qy):
             return placed
     return None
-    
+
 
 def draw():
     now = time.time()
@@ -97,7 +105,7 @@ def draw():
     for by in range(height):
         outRow = ""
         for bx in range(width):
-            cell = rnd.choice("abcdefghijklmnopqrsuvwxyz")+' '
+            cell = rnd.choice("abcdefghijklmnopqrsuvwxyz") + ' '
             if boardSetup is not None:
                 dist = math.hypot(bx - width / 2, by - height / 2) / width / 2
                 if dist > boardSetup:
@@ -111,7 +119,7 @@ def draw():
                 cell = "🐕"
                 if trap is not None:
                     trapEnemy()
-            
+
             if trap is not None:
                 age = now - trap
                 if age > .5:
@@ -139,6 +147,7 @@ def update(loop, _):
 
     loop.set_alarm_in(.05, update)
 
+
 def onKey(key):
     global x, y
     if key == 'left':
@@ -153,6 +162,7 @@ def onKey(key):
         traps.append((x, y, time.time()))
         runAwaySteps = 3
         stepAway()
+
 
 txt = urwid.Text("")
 fill = urwid.Filler(txt, valign=urwid.TOP)
